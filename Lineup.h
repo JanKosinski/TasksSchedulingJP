@@ -6,11 +6,11 @@
 #define TASKSSCHEDULING_LINEUP_H
 
 
-#include "Event.h"
+#include "Task.h"
 
 class Lineup {
     public:
-        std::vector<Event*>lineup;
+        std::vector<Task*>lineup;
 };
 
 

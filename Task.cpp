@@ -4,9 +4,10 @@
 
 #include "Task.h"
 
-Task::Task(int len_1m, int len_2m) {
+Task::Task(int len_1m, int len_2m, bool _task) {
     this->len_1m = len_1m;
     this->len_2m = len_2m;
+    this->task = _task;
 }
 
 int Task::getBeginning_2m() {

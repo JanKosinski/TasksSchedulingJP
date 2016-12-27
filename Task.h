@@ -1,24 +1,26 @@
 //
 // Created by Jan Kosinski on 27.12.2016.
 //
-#include "Event.h"
 
 #ifndef TASKSSCHEDULING_TASK_H
 #define TASKSSCHEDULING_TASK_H
 
 
-class Task: public Event {
+class Task{
     private:
         int begin_1m;
         int len_1m;
+        int begin_2m;
+        int len_2m;
+        bool task;      //jezeli przerwa to false, zadanie to true
     public:
-        Task(int len_1m, int len_2m);   //konstruktor
+        Task(int len_1m, int len_2m, bool _task);   //konstruktor
         int getBeginning_1m();  //pobiera czas rozpoczecia  zadania na 1 maszynie
         void setBeginning_1m(int newBeginning); //ustawia czas rozpoczecia zadania na 1 maszynie
         int getLen_1m();    //pobiera czas trwania zadania na 1 maszynie
-        virtual int getBeginning_2m();  //patrz klasa Event
-        virtual void setBeginning_2m(int newBeginning); //patrz klasa Event
-        virtual int getLen_2m();    //patrz klasa Event
+        int getBeginning_2m();  //patrz klasa Event
+        void setBeginning_2m(int newBeginning); //patrz klasa Event
+        int getLen_2m();    //patrz klasa Event
 };
 
 
