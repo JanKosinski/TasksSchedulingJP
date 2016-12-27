@@ -1,0 +1,8 @@
+//
+// Created by Jan Kosinski on 27.12.2016.
+//
+
+#ifndef TASKSSCHEDULING_PARAMETERS_H
+#define TASKSSCHEDULING_PARAMETERS_H
+
+#endif //TASKSSCHEDULING_PARAMETERS_H
