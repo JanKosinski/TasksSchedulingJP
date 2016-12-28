@@ -33,3 +33,15 @@ void Task::setBeginning_1m(int newBeginning) {
 int Task::getBeginning_1m() {
     return this->begin_1m;
 }
+
+int Task::getId() {
+    return this->id;
+}
+
+void Task::setId(int id) {
+    this->id = id;
+}
+
+bool Task::isItTask() {
+    return this->task;
+}

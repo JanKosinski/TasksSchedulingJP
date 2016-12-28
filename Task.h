@@ -8,6 +8,7 @@
 
 class Task{
     private:
+        int id;
         int begin_1m;
         int len_1m;
         int begin_2m;
@@ -21,6 +22,9 @@ class Task{
         int getBeginning_2m();  //patrz klasa Event
         void setBeginning_2m(int newBeginning); //patrz klasa Event
         int getLen_2m();    //patrz klasa Event
+        int getId();
+        void setId(int id);
+        bool isItTask();
 };
 
 
