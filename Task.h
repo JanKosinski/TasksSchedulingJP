@@ -15,7 +15,7 @@ class Task{
         int len_2m;
         bool task;      //jezeli przerwa to false, zadanie to true
     public:
-        Task(int len_1m, int len_2m, bool _task);   //konstruktor
+        Task(int id, int len_1m, int len_2m, bool _task);   //konstruktor
         int getBeginning_1m();  //pobiera czas rozpoczecia  zadania na 1 maszynie
         void setBeginning_1m(int newBeginning); //ustawia czas rozpoczecia zadania na 1 maszynie
         int getLen_1m();    //pobiera czas trwania zadania na 1 maszynie

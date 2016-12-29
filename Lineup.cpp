@@ -1,6 +1,7 @@
 //
 // Created by Jan Kosinski on 27.12.2016.
 // Funkcje zawarte w tym pliku nie zostaly przetestowane. JKO 28.12.2016
+// Podstawowe testy zostaly przeprowadzone. Nie wykazaly bledow. JKO 29.12.2016
 //
 
 #include "Lineup.h"
@@ -33,7 +34,16 @@ std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { 
         distanceBetweenTechnicalBreaks = true;  //wszystko jest ok. Warunek spelniony
     }
     // i przesuwamy zadania. Albo jak nie trzeba zwracamy taka sama kolejnosc jak wejsciowa
-    for (int j = 0; j<lineup.size()-1; j++) {   // iterujemy po wszystkich elementach
+    for (int j = 0; j<lineup.size(); j++) {   // iterujemy po wszystkich elementach
+        if (j==lineup.size()) {
+            if (lineup[j].getId() == breakToLeft) {    //jezeli to nasza przerwa
+                ;   //juz wstawilismy ta przerwe. Drugi raz nie mozna
+            }
+            else {
+                tasksOrder.push_back(lineup[j].getId());    //wstawiamy zadanie
+            }
+            break;
+        }
         if (lineup[j+1].getId() == breakToLeft) {   // jezeli nastepny element to przerwa do przesuniecia
             tasksOrder.push_back(lineup[j+1].getId());  //wstawiamy ja
             tasksOrder.push_back(lineup[j].getId());    //a potem zadanie
@@ -47,7 +57,6 @@ std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { 
     }
     return tasksOrder;
 }
-
 
 void Lineup::createLineup(std::vector<int> tasksOrder) {    // JKO 28.12.2016. Dodac warunek by przerwy byly w odstepie co najwyzej x
     std::vector<int>fixedBreaks;    // wektor zawierajacy kolejnosc zadan ze zmianami tak by zachowany byl max odstep x pomiedzy przerwami
