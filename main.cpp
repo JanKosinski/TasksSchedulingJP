@@ -3,10 +3,14 @@
 #include <vector>
 #include "Lineup.h"
 #include "Task.h"
+#include <time.h>
+#include <cstdlib>
+#include "Generator.h"
 
 using namespace std;
 
-int maxDistBetweenBreaks = 0;
+//int maxDistBetweenBreaks = 0;
+
 
 void test1() {
     //testowane dla maxDistBetweenBreaks = 3. test ok!
@@ -75,7 +79,7 @@ void test2() {
 int main() {
     srand( time( NULL) );
     test2();
-
+    Generator::generate();
 
     return 0;
 }
