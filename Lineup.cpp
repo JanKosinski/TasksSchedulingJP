@@ -7,6 +7,14 @@
 #include "Lineup.h"
 #include "parameters.h"
 
+void Lineup::setCj(int value) {
+    this->cj = value;
+}
+
+int Lineup::getCj() {
+    return this->cj;
+}
+
 bool distanceBetweenTechnicalBreaks = false;
 
 std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { // funkcja sprawdza czy maksymalny odstep x pomiedzy przerwami jest zachowany
@@ -85,6 +93,14 @@ void Lineup::createLineup(std::vector<int> tasksOrder) {    // JKO 28.12.2016. D
         this->createLineup(fixedBreaks);        //tworzymy uszeregowanie z przesunieta przerwa
         fixedBreaks = checkDistanceBetweenTechnicalBreaks(this->lineup);    //sprawdzamy warunek i ewentualnie dokonujemy kolejnego przesuniecia
     }
+    // zliczanie sumy czasów zakończenia zadań
+    this->setCj(0);
+    for (int i = 0 ; i<this->lineup.size(); i++) {
+        if (this->lineup[i].isItTask()) {
+            this->setCj(this->getCj()+this->lineup[i].getBeginning_2m()+this->lineup[i].getLen_2m());
+        }
+    }
+    // koniec zliczania
 }
 
 

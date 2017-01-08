@@ -29,12 +29,12 @@ std::vector <Task> tasks;
 
 void Generator::generate() {
     string choose="";
-    system( "cls" );
+    //system( "cls" );
     cout << ":::GENERATOR:::" << endl;
     cout << "Wybierz opcje:" << endl;
     cout << "1 - generator automatyczny" << endl << "2 - generator manualny" << endl;
     cin >> choose;
-    system( "cls" );
+    //system( "cls" );
     if (choose=="1") {
         Generator::automaticGenerativity();
     }
@@ -85,3 +85,4 @@ void Generator::manualGenerativity() {
     cin >> maxDistBetweenBreaks;
 
 }
+
