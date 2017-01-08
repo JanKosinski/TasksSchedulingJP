@@ -50,9 +50,8 @@ void Generator::generate() {
         tasks.push_back(tmp_task);
     }
     for (int i=1;i<numOfBreaks+1;i++){
-        len1=(rand()%maxTaskLen)+1;
         len2=(rand()%maxTaskLen)+1;
-        Task tmp_task=Task(i, len1, len2, true);
+        Task tmp_task=Task(i, 0, len2, false);
         tasks.push_back(tmp_task);
     }
 }
@@ -61,9 +60,9 @@ void Generator::automaticGenerativity() {
     cout << "\t\t\t:::GENERATOR AUTOMATYCZNY:::" << endl << endl;
     numOfTasks=(rand()%16)+15;      // zakres <15;30>
     numOfBreaks=(((rand()%31)+20)*numOfTasks)/100;     // zakres <20% liczby zadań; 50% liczby zadań>
-    maxTaskLen=10;
+    maxTaskLen=5;
     breaksLen=(rand()%maxTaskLen)+1;    // zakres <1; maxTaskLen>
-    maxDistBetweenBreaks=(rand()%((maxTaskLen/2)+1))+maxTaskLen;    // zakres <maxTaskLen; 1,5*maxTaskLen>
+    maxDistBetweenBreaks=(rand()%((maxTaskLen)+1))+2*maxTaskLen;    // zakres <2*maxTaskLen; 3*maxTaskLen>
     cout << "Liczba zadan:\t" << numOfTasks << endl;
     cout << "Liczba okresow niedostepnosci:\t" << numOfBreaks << endl;
     cout << "Czas trwania okresu niedostepnosci:\t" << breaksLen << endl;
@@ -85,4 +84,3 @@ void Generator::manualGenerativity() {
     cin >> maxDistBetweenBreaks;
 
 }
-

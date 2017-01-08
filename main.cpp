@@ -6,6 +6,7 @@
 #include <time.h>
 #include <cstdlib>
 #include "Generator.h"
+#include "JohnsonsAlgorithm.h"
 
 using namespace std;
 
@@ -78,8 +79,8 @@ void test2() {
 
 int main() {
     srand( time( NULL) );
-    test2();
+    //test2();
     Generator::generate();
-
+    JohnsonsAlgorithm::createLineupJA();
     return 0;
 }

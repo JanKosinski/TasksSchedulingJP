@@ -7,6 +7,8 @@
 #include "Lineup.h"
 #include "parameters.h"
 
+bool distanceBetweenTechnicalBreaks = false;
+
 void Lineup::setCj(int value) {
     this->cj = value;
 }
@@ -14,8 +16,6 @@ void Lineup::setCj(int value) {
 int Lineup::getCj() {
     return this->cj;
 }
-
-bool distanceBetweenTechnicalBreaks = false;
 
 std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { // funkcja sprawdza czy maksymalny odstep x pomiedzy przerwami jest zachowany
     // jezeli nie jest przesuwa pierwsza przerwe ktora niespelnia warunku w lewo o jedno zadanie. Jezeli dalej warunek nie jest spelniony funkcja jest uruchamiana rekurencyjnie az warunek bedzie spelniony
