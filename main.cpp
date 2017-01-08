@@ -11,6 +11,7 @@
 using namespace std;
 
 //int maxDistBetweenBreaks = 0;
+#include "Population.h"
 
 
 void test1() {
@@ -81,6 +82,9 @@ int main() {
     srand( time( NULL) );
     //test2();
     Generator::generate();
-    JohnsonsAlgorithm::createLineupJA();
+    //JohnsonsAlgorithm::createLineupJA();
+    Population *population = new Population();
+    population->createRandomPopulation();
+
     return 0;
 }

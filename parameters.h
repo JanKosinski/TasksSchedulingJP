@@ -21,6 +21,7 @@ extern int breaksLen;       //czas trwania przerw
 extern int maxTaskLen;      //maksymalny czas trwania jednej operacji zadania
 extern int maxDistBetweenBreaks;    //maksymalny czas x po ukonczeniu jednego okresu niedostepnosci, po ktorym musi zaczac sie nastepny
 
-
+//algorytm genetyczny
+extern int populationSize; //rozmiar populacji
 
 #endif //TASKSSCHEDULING_PARAMETERS_H
