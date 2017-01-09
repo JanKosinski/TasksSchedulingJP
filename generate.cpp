@@ -49,7 +49,7 @@ void Generator::generate() {
         Task tmp_task=Task(i, len1, len2, true);
         tasks.push_back(tmp_task);
     }
-    for (int i=1;i<numOfBreaks+1;i++){
+    for (int i=numOfTasks+1;i<numOfBreaks+numOfTasks+1;i++){
         len2=(rand()%maxTaskLen)+1;
         Task tmp_task=Task(i, 0, len2, false);
         tasks.push_back(tmp_task);

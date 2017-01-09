@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include "population.h"
 
 bool inVec(std::vector<int> vec, int value) {   //sprawdza czy podana wartosc (value) wystepuje w wektorze (vec)
     for (int i = 0; i<vec.size(); i++) {
@@ -54,5 +55,32 @@ std::vector<int> operator* (std::vector<int> a, std::vector<int> b) {
                 std::cout<<"ERROR during hybridization"<<std::endl;
             }
         }
+    }
+    return output;
+}
+
+
+std::vector<int> lineupToTasksOrder(Lineup currentLineup) {
+    std::vector<int>myNewOrder;
+    for (int i = 0; i<currentLineup.lineup.size(); i++) {
+        myNewOrder.push_back(currentLineup.lineup[i].getId());
+    }
+    return myNewOrder;
+}
+
+//NIE DZIALA
+void Population::hybridization() {
+    int hyb_randomLineup;
+    std::vector<int> hyb_newLineup;
+    Lineup *l;
+    for (int i = 0; i<this->lineups.size(); i++) {
+        hyb_randomLineup = (std::rand()%lineups.size())+0;
+        while (i == hyb_randomLineup) {
+            hyb_randomLineup = (std::rand()%lineups.size())+0;
+        }
+        hyb_newLineup = lineupToTasksOrder(lineups[i])*lineupToTasksOrder(lineups[hyb_randomLineup]);
+        l = new Lineup();
+        l->createLineup(hyb_newLineup);
+        this->lineups.push_back(*l);
     }
 }

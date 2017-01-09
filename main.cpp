@@ -85,6 +85,8 @@ int main() {
     //JohnsonsAlgorithm::createLineupJA();
     Population *population = new Population();
     population->createRandomPopulation();
-
+    population->sortPopulation();
+    population->selection();
+    //population->hybridization(); hybrydyzacja do testow. NIE DZIALA
     return 0;
 }

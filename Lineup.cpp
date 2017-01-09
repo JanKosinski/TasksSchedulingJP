@@ -68,21 +68,21 @@ std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { 
 
 void Lineup::createLineup(std::vector<int> tasksOrder) {    // JKO 28.12.2016. Dodac warunek by przerwy byly w odstepie co najwyzej x
     std::vector<int>fixedBreaks;    // wektor zawierajacy kolejnosc zadan ze zmianami tak by zachowany byl max odstep x pomiedzy przerwami
-    std::vector<Task>prvLineup = this->lineup;  //tworzymy kopie poprzedniego uszeregowania
+    //std::vector<Task>prvLineup = this->lineup;  //tworzymy kopie poprzedniego uszeregowania. UWAGA ZMIENIONO prvLineup na tasks. NIE PRZETESTOWANE
     this->lineup.clear();   //czyscimy poprzednie uszeregowanie. W to miejsce bedziemy zapisywac nowe
     int currentTime = 0;    // czas zakonczenia ostatniego zadania na pierwszej maszynie
     int prvTaskLen_2m = 0;  // czas trwania ostatniego zadania na 2 maszynie
     for (int i = 0; i<tasksOrder.size(); i++) {     // iterujemy po wektorze reprezentujacym kolejnosc zadan
-        for (int j = 0; j<prvLineup.size(); j++) {   // szukamy w biezacym uszeregowaniu zdania o id takim samym jak w wektorze reprezentujacym kolejnosc
-            if (tasksOrder[i] == prvLineup[j].getId()) {
-                if (prvTaskLen_2m > prvLineup[j].getLen_1m()) {   // jezeli czas trwania poprzedniego zadania na drugiej maszynie jest wiekszy niz obecnego na pierwszej
-                    currentTime += prvTaskLen_2m - prvLineup[j].getLen_1m(); //trzeba wstawic zadanie tak zeby jego operacja na 2m mogla zaczac sie zaraz po zakonczeniu pierwszej
+        for (int j = 0; j<tasks.size(); j++) {   // szukamy w biezacym uszeregowaniu zdania o id takim samym jak w wektorze reprezentujacym kolejnosc
+            if (tasksOrder[i] == tasks[j].getId()) {
+                if (prvTaskLen_2m > tasks[j].getLen_1m()) {   // jezeli czas trwania poprzedniego zadania na drugiej maszynie jest wiekszy niz obecnego na pierwszej
+                    currentTime += prvTaskLen_2m - tasks[j].getLen_1m(); //trzeba wstawic zadanie tak zeby jego operacja na 2m mogla zaczac sie zaraz po zakonczeniu pierwszej
                 }
-                prvLineup[j].setBeginning_1m(currentTime);  //ustawiamy czas rozpoczecia zadania na pierwszej maszynie
-                currentTime += prvLineup[j].getLen_1m();    //ustawiamy zmienna currentTime na czas zakonczenia ostatniego zadania na pierwszej maszynie
-                prvLineup[j].setBeginning_2m(currentTime);  //zmienna currentTime warunkuje od razu kiedy powinno zaczynac sie zadanie na drugiej maszynie
-                this->lineup.push_back(prvLineup[j]);   // dodajemy zadanie do nowo powstalego uszeregowania
-                prvTaskLen_2m = prvLineup[j].getLen_2m();   //ustawiamy zmienna informujaca nas o czasie trwania ostatniego zadania na 2m
+                tasks[j].setBeginning_1m(currentTime);  //ustawiamy czas rozpoczecia zadania na pierwszej maszynie
+                currentTime += tasks[j].getLen_1m();    //ustawiamy zmienna currentTime na czas zakonczenia ostatniego zadania na pierwszej maszynie
+                tasks[j].setBeginning_2m(currentTime);  //zmienna currentTime warunkuje od razu kiedy powinno zaczynac sie zadanie na drugiej maszynie
+                this->lineup.push_back(tasks[j]);   // dodajemy zadanie do nowo powstalego uszeregowania
+                prvTaskLen_2m = tasks[j].getLen_2m();   //ustawiamy zmienna informujaca nas o czasie trwania ostatniego zadania na 2m
                 break;  // jezeli znajdziemy konczymy szukanie
             }
         }
@@ -103,4 +103,10 @@ void Lineup::createLineup(std::vector<int> tasksOrder) {    // JKO 28.12.2016. D
     // koniec zliczania
 }
 
-
+std::vector<int> Lineup::getOrder() {   //zwraca wektor kolejnosci
+    std::vector <int>order;
+    for (int i = 0; i<this->lineup.size(); i++) {
+        order.push_back(this->lineup[i].getId());
+    }
+    return order;
+}

@@ -3,17 +3,13 @@
 //
 
 #include "Population.h"
-
-#include "parameters.h"
-#include <algorithm>
-#include "Task.h"
-#include <vector>
-#include "Lineup.h"
 #include <random>
 #include <iostream>
 
 
 int populationSize = 100; // rozmiar populacji
+int bests = 40;
+int randoms = 10;
 
 void Population::createRandomPopulation() {
     //tworzymy wektor zawierajacy wszystkie id zadan i przerw
@@ -39,3 +35,39 @@ void Population::createRandomPopulation() {
         this->lineups.push_back(*lineup);
     }
 }
+
+bool operator<( const Lineup& c1, const Lineup& c2 ) { return c1.cj > c2.cj; }
+
+void Population::sortPopulation() {
+    std::sort(this->lineups.begin(), this->lineups.end());
+    std::reverse(this->lineups.begin(), this->lineups.end());
+}
+
+bool isInVector(int value, std::vector<int>myVector) {  // sprawdza czy int znajduje sie w wektorze int
+    for (int i = 0; i<myVector.size(); i++) {
+        if (value == myVector[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Population::selection() {
+    //40 najlepszych + 10 losowych
+    vector<int>idxAlreadyUsed;  // indeksy uszeregowan juz uzyte
+    vector<Lineup>newPopulation;
+    int randIdx;
+    for (int i = 0; i<bests; i++) {
+        newPopulation.push_back(this->lineups[i]);
+        idxAlreadyUsed.push_back(i);
+    }
+    for (int j = 0; j<randoms; j++) {
+        randIdx = (std::rand()%(populationSize-bests-randoms))+(bests+randoms);
+        while(isInVector(randIdx, idxAlreadyUsed )) {  //randIdx is in idxAlreadyUsed
+            randIdx = (std::rand()%(populationSize-bests-randoms))+(bests+randoms);
+        }
+        idxAlreadyUsed.push_back(randIdx);
+        newPopulation.push_back(this->lineups[randIdx]);
+    }
+}
+

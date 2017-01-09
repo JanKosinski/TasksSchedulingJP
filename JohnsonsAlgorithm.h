@@ -9,10 +9,14 @@
 #include <vector>
 
 class JohnsonsAlgorithm {
+    private:
+        int Cj;
     public:
-    std::vector <Task> lineupJA;
-    static  void  createLineupJA();
-    //static std::vector <Task> createLineupJA();
+        int getCj();
+        void setCj(int value);
+        std::vector <Task> lineupJA;
+        static  void  createLineupJA();
+        //static std::vector <Task> createLineupJA();
 };
 
 #endif //TASKSSCHEDULING_JOHNSONSALGORITHM_H

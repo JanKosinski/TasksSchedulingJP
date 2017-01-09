@@ -14,6 +14,14 @@ using namespace std;
 vector <Task> tasks1;
 vector <Task> tasks2;
 
+void JohnsonsAlgorithm::setCj(int value) {
+    this->Cj = value;
+}
+
+int JohnsonsAlgorithm::getCj() {
+    return this->Cj;
+}
+
 void quickSort1(int left, int right) {
     int i=left;
     int j=right;
