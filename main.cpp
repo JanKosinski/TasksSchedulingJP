@@ -10,9 +10,7 @@
 
 using namespace std;
 
-//int maxDistBetweenBreaks = 0;
 #include "Population.h"
-
 
 void test1() {
     //testowane dla maxDistBetweenBreaks = 3. test ok!
@@ -82,11 +80,20 @@ int main() {
     srand( time( NULL) );
     //test2();
     Generator::generate();
+    Generator::printTasks();
+    system( "read -n 1 -s -p \"Press any key to continue...\"" );
     //JohnsonsAlgorithm::createLineupJA();
     Population *population = new Population();
     population->createRandomPopulation();
+    cout<<"Random population size: "<<to_string(population->lineups.size())<<endl;
+    system( "read -n 1 -s -p \"Press any key to continue...\"" );
     population->sortPopulation();
     population->selection();
-    //population->hybridization(); hybrydyzacja do testow. NIE DZIALA
+    population->sortPopulation();
+    population->createProbabilities();
+    cout<<"Population After Selection Size: "<<to_string(population->lineups.size())<<endl;
+    system( "read -n 1 -s -p \"Press any key to continue...\"" );
+    population->hybridization();
+    cout<<"Population after hybridization: "<<to_string(population->lineups.size())<<endl;
     return 0;
 }

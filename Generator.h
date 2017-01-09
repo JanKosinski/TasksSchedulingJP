@@ -12,6 +12,7 @@ public:
     static void generate();
     static void automaticGenerativity();
     static void manualGenerativity();
+    static void printTasks();
 };
 
 #endif //TASKSSCHEDULING_GENERATOR_H

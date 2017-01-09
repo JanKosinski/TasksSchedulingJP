@@ -84,3 +84,9 @@ void Generator::manualGenerativity() {
     cin >> maxDistBetweenBreaks;
 
 }
+
+void Generator::printTasks() {
+    for (int i = 0; i<tasks.size(); i++) {
+        cout<<"ID: "<<tasks[i].getId()<<endl;
+    }
+}

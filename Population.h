@@ -11,13 +11,16 @@
 #include "Lineup.h"
 
 
+
 class Population {
     public:
         std::vector<Lineup>lineups;
+        std::vector<int>probabilities; //prawdopodobieństwa z jakimi uszeregowania przejda dalej
         void createRandomPopulation();
-        void selection();
+        void selection(bool minPopSize = false);    //z parametrem na true bedzie wybierac tak by osiagnac tylko minPopSize (gdy za pierwszym wywolaniem bedzie mniej)
         void sortPopulation();  //sortowanie populacji wg przystosowania
         void hybridization();   // w pliku hybridization.cpp . Inaczej powodowalo tajemnicze bledy
+        void createProbabilities();
 };
 
 

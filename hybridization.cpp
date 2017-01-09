@@ -7,57 +7,7 @@
 #include <iostream>
 #include "population.h"
 
-bool inVec(std::vector<int> vec, int value) {   //sprawdza czy podana wartosc (value) wystepuje w wektorze (vec)
-    for (int i = 0; i<vec.size(); i++) {
-        if (value == vec[i]) {
-            return true;
-        }
-    }
-    return false;
-}
-
-int takeValue(std::vector<int> input, std::vector<int> alreadyTaken) {  //pobiera pierwsza ceche z wektora input, ktora nie wystepuje w wektorze alreadyTaken, czyli juz wykorzystanych
-    for (int i = 0; i<input.size(); i++) {
-        if (!inVec(alreadyTaken, input[i])) {
-            return input[i];
-        }
-    }
-    std::cout<<"ERROR in takeValue"<<std::endl; // nie powinna wystepowac sytuacja w której w wektorze input nie ma wartosci ktora nie zostala jeszcze wykorzystana
-    return -1;
-}
-
-std::vector<int> operator* (std::vector<int> a, std::vector<int> b) {
-    std::vector<int>output;
-    int random;
-    int aCount = 0; //informuje o tym ile cech wzielismy z wektora a
-    int bCount = 0; //informuje o tym ile cech wzielismy z wektora b
-    //stosunek aCount do bCount powinien byc w przyblizeniu 1:1
-    for (int i = 0; i<a.size(); i++) {
-        random = (std::rand()%2) + 0;   // losujemy liczbe 0 albo 1
-        if (bCount > (a.size()/2)) {    //jezeli liczba zaczerpnietych cech z wektora b jest wieksza niz polowa wszystkich
-            aCount++;   //to pobieramy pierwsze nie uzyte jeszcze zadanie z wektora a
-            output.push_back(takeValue(a, output));
-        }
-        else if (aCount > (a.size()/2)) {   //jezeli liczba zaczerpnietych cech z wektora a jest wieksza niz polowa wszystkich
-            bCount++;   //to pobieramy pierwsze nie uzyte jeszcze zadanie z wektora b
-            output.push_back(takeValue(b, output));
-        }
-        else {
-            if (random == 0) {  //jezeli wylosowalismy 0 to bierzemy pierwsze nie uzyte jeszcze zadanie z wektora a
-                aCount++;
-                output.push_back(takeValue(a, output));
-            }
-            else if (random == 1) { //jezeli wylosowalismy 0 to bierzemy pierwsze nie uzyte jeszcze zadanie z wektora b
-                bCount++;
-                output.push_back(takeValue(b, output));
-            }
-            else {  //jezeli komunikat sie pojawi to znaczy ze losowane sa jakies liczby poza 0 i 1. Czyli blad. TESTOWO
-                std::cout<<"ERROR during hybridization"<<std::endl;
-            }
-        }
-    }
-    return output;
-}
+using namespace std;
 
 
 std::vector<int> lineupToTasksOrder(Lineup currentLineup) {
@@ -68,19 +18,89 @@ std::vector<int> lineupToTasksOrder(Lineup currentLineup) {
     return myNewOrder;
 }
 
-//NIE DZIALA
-void Population::hybridization() {
-    int hyb_randomLineup;
-    std::vector<int> hyb_newLineup;
-    Lineup *l;
-    for (int i = 0; i<this->lineups.size(); i++) {
-        hyb_randomLineup = (std::rand()%lineups.size())+0;
-        while (i == hyb_randomLineup) {
-            hyb_randomLineup = (std::rand()%lineups.size())+0;
+bool inVector(int value, std::vector<int>myVector) {  // sprawdza czy int znajduje sie w wektorze int
+    for (int i = 0; i<myVector.size(); i++) {
+        if (value == myVector[i]) {
+            return true;
         }
-        hyb_newLineup = lineupToTasksOrder(lineups[i])*lineupToTasksOrder(lineups[hyb_randomLineup]);
-        l = new Lineup();
-        l->createLineup(hyb_newLineup);
-        this->lineups.push_back(*l);
     }
+    return false;
+}
+
+int findPos(vector<int>vec, bool fromBeginning = true) {
+    if (fromBeginning) {
+        for (int i = 0; i<vec.size(); i++) {
+            if (vec[i] == -1) {
+                return i;
+            }
+        }
+    }
+    else {
+        for (int j = vec.size()-1; j>=0; j--) {
+            if (vec[j] == -1) {
+                return j;
+            }
+        }
+    }
+    return -2;  // nie ma wiecej wartosci do wstawienia
+}
+
+vector<int> operator* (vector<int> mother, vector<int> father) {
+    vector<int>output(mother.size(), -1);  //wektor wynikowy. Inicjujemy -1
+    vector<int>temp;    //wektor tymczasowy. Sluzy jedynie do zamiany matki i ojca
+    int valueToInsert;
+    int idxToInsert;
+    int random = (rand()%2)+0;  //losujemy czy zamieniamy matke z ojcem. Wazne by losowo bylo od kogo bierzemy poczatek a od kogo koniec
+    if (random == 0) {  // zamieniamy matke z ojcem
+        temp = mother;
+        mother = father;    //zamiana
+        father = temp;
+    }
+
+    for (int i = 0; i<mother.size(); i++) {
+
+        //wstawiamy cechy od matki. Od poczatku
+        if (findPos(output)==-2) {break;}   //oznacza ze wszystkie wartosci juz zostaly wstawione
+        valueToInsert = mother[i];  //chcemy wstawic taka wartosc
+        if(!(inVector(valueToInsert, output))) {  //jezeli nie ma jej jeszcze w wektorze wyjsciowym to wstaawiamy na pierwsza pozycje, na ktorej jest -1
+            idxToInsert = findPos(output);  //znajduje pierwszy index w wektorze w ktory mozna wstawic wartosc
+            output[idxToInsert] = valueToInsert;    //wstawia wartosc
+        }
+
+        //wstawiamy cechy od ojca. Od konca
+        if (findPos(output)==-2) {break;}   //oznacza ze wszystkie wartosci juz zostaly wstawione.
+        valueToInsert = father[father.size()-(i+1)];
+        if(!(inVector(valueToInsert, output))) {
+            idxToInsert = findPos(output, false);
+            output[idxToInsert] = valueToInsert;    //wstawia wartosc
+        }
+    }
+
+    return output;
+}
+
+
+void Population::hybridization() {
+    int random;
+    int i = 0;
+    std::vector<int> newLineup;
+    int randomLineup;
+    Lineup *l;
+    vector<Lineup>tempVectorOfLineups = this->lineups;      //przepisujemy osobniki, ktore przezyly selekcje
+    while(tempVectorOfLineups.size()<populationSize) {      //dopoki nie osiagniemy pojemnosci srodowiska czyli populationSize
+        randomLineup = (rand()%this->lineups.size())+0;     //szukamy losowego partnera dla danego osobnika
+        while (randomLineup == i) {
+            randomLineup = (rand()%this->lineups.size())+0; //nie moze przeciez krzyzowac sie ze soba
+        }
+        newLineup = lineupToTasksOrder(this->lineups[i])*lineupToTasksOrder(this->lineups[randomLineup]);   //krzyzujemy
+        l = new Lineup();
+        l->createLineup(newLineup);
+        tempVectorOfLineups.push_back(*l);  //dodajemy do populacji
+        i++;    //i nastepny osobnik
+        if (i>this->lineups.size()) {   //pilnuje zeby i nie wyszlo poza zakres
+            i = 0;
+        }
+    }
+    this->lineups = tempVectorOfLineups;
+    delete l;
 }

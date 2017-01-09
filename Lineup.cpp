@@ -6,6 +6,7 @@
 
 #include "Lineup.h"
 #include "parameters.h"
+#include <iostream>
 
 bool distanceBetweenTechnicalBreaks = false;
 
@@ -100,6 +101,7 @@ void Lineup::createLineup(std::vector<int> tasksOrder) {    // JKO 28.12.2016. D
             this->setCj(this->getCj()+this->lineup[i].getBeginning_2m()+this->lineup[i].getLen_2m());
         }
     }
+    //std::cout<<"Lineup Size: "<<to_string(this->lineup.size())<<std::endl;    //TEST
     // koniec zliczania
 }
 
