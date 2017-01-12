@@ -6,9 +6,9 @@
 #include <cstdlib>
 #include <iostream>
 #include "population.h"
+#include "mutation.h"
 
 using namespace std;
-
 
 std::vector<int> lineupToTasksOrder(Lineup currentLineup) {
     std::vector<int>myNewOrder;
@@ -79,13 +79,13 @@ vector<int> operator* (vector<int> mother, vector<int> father) {
     return output;
 }
 
-
 void Population::hybridization() {
+    this->sortPopulation();
     int random;
     int i = 0;
     std::vector<int> newLineup;
     int randomLineup;
-    Lineup *l;
+    Lineup l;
     vector<Lineup>tempVectorOfLineups = this->lineups;      //przepisujemy osobniki, ktore przezyly selekcje
     while(tempVectorOfLineups.size()<populationSize) {      //dopoki nie osiagniemy pojemnosci srodowiska czyli populationSize
         randomLineup = (rand()%this->lineups.size())+0;     //szukamy losowego partnera dla danego osobnika
@@ -93,14 +93,20 @@ void Population::hybridization() {
             randomLineup = (rand()%this->lineups.size())+0; //nie moze przeciez krzyzowac sie ze soba
         }
         newLineup = lineupToTasksOrder(this->lineups[i])*lineupToTasksOrder(this->lineups[randomLineup]);   //krzyzujemy
-        l = new Lineup();
-        l->createLineup(newLineup);
-        tempVectorOfLineups.push_back(*l);  //dodajemy do populacji
+
+        //MUTACJA!
+        random = (rand()%100)+0;
+        if (random<=3) {
+            newLineup = mutation(newLineup);
+        }
+        //KONIEC MUTACJI
+
+        l.createLineup(newLineup);
+        tempVectorOfLineups.push_back(l);  //dodajemy do populacji
         i++;    //i nastepny osobnik
-        if (i>this->lineups.size()) {   //pilnuje zeby i nie wyszlo poza zakres
+        if (i>this->lineups.size()-1) {   //pilnuje zeby i nie wyszlo poza zakres
             i = 0;
         }
     }
     this->lineups = tempVectorOfLineups;
-    delete l;
 }

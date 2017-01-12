@@ -24,5 +24,6 @@ extern int maxDistBetweenBreaks;    //maksymalny czas x po ukonczeniu jednego ok
 //algorytm genetyczny
 extern int populationSize; //rozmiar populacji
 extern int minPopulationSize; //liczebnosc populacji nie moze spasc ponizej tego poziomu
+extern int probabilityOfMutation; //prawdopodobieństwo mutacji. W procentach
 
 #endif //TASKSSCHEDULING_PARAMETERS_H

@@ -30,6 +30,7 @@ void Population::createRandomPopulation() {
         lineup->createLineup(newOrder);
         this->lineups.push_back(*lineup);
     }
+    delete lineup;
 }
 
 bool operator<( const Lineup& c1, const Lineup& c2 ) { return c1.cj > c2.cj; }
@@ -40,6 +41,7 @@ void Population::sortPopulation() {
 }
 
 void Population::createProbabilities() {
+    this->probabilities.clear();
     vector<int>output;
     int currentProbability;
     double currentValue;
@@ -67,6 +69,7 @@ void Population::createProbabilities() {
 
 void Population::selection(bool minPopSize) {
     vector<Lineup>newPopulation;
+    this->sortPopulation();
     this->createProbabilities();
     int random;
     for (int i = 0; i<this->lineups.size(); i++) {
@@ -78,9 +81,9 @@ void Population::selection(bool minPopSize) {
             }
         }
     }
-    while(newPopulation.size()<minPopulationSize) { // tak dlugo dokonuje selekcji by pozostalo min minPopulationSize osobnikow
+    /*while(newPopulation.size()<minPopulationSize) { // tak dlugo dokonuje selekcji by pozostalo min minPopulationSize osobnikow
         this->selection(true);
-    }
+    }*/
     this->lineups = newPopulation;  //zapisujemy nowa populacje
 }
 

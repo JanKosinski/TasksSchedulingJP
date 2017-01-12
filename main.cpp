@@ -76,24 +76,38 @@ void test2() {
     }
 }
 
+void geneticAlgorithm() {
+    Population *population = new Population();
+    population->createRandomPopulation();
+    Lineup theBestLineup = population->lineups[0];
+    cout << "The best lineup: " << theBestLineup.getCj() << endl;
+    int loopNum = 0;
+    while(true) {
+        if (loopNum%30 == 0 && loopNum !=0) {
+            if (abs(theBestLineup.getCj()-population->lineups[0].getCj())==0) {
+                break;
+            }
+        }
+        population->selection();
+        if(population->lineups.size()<2) {  //populacja nam wyginela :D
+            return;
+        }
+        population->hybridization();
+        population->sortPopulation();
+        if (theBestLineup.getCj()>population->lineups[0].getCj()) {
+            theBestLineup = population->lineups[0];
+            cout << "The best lineup: " << theBestLineup.getCj() << endl;
+        }
+        loopNum++;
+    }
+    delete population;
+}
+
 int main() {
     srand( time( NULL) );
     //test2();
     Generator::generate();
-    Generator::printTasks();
-    system( "read -n 1 -s -p \"Press any key to continue...\"" );
     //JohnsonsAlgorithm::createLineupJA();
-    Population *population = new Population();
-    population->createRandomPopulation();
-    cout<<"Random population size: "<<to_string(population->lineups.size())<<endl;
-    system( "read -n 1 -s -p \"Press any key to continue...\"" );
-    population->sortPopulation();
-    population->selection();
-    population->sortPopulation();
-    population->createProbabilities();
-    cout<<"Population After Selection Size: "<<to_string(population->lineups.size())<<endl;
-    system( "read -n 1 -s -p \"Press any key to continue...\"" );
-    population->hybridization();
-    cout<<"Population after hybridization: "<<to_string(population->lineups.size())<<endl;
+    geneticAlgorithm();
     return 0;
 }
