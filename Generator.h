@@ -5,6 +5,7 @@
 #ifndef TASKSSCHEDULING_GENERATOR_H
 #define TASKSSCHEDULING_GENERATOR_H
 
+#include <vector>
 
 class Generator {
 public:
@@ -13,6 +14,7 @@ public:
     static void automaticGenerativity();
     static void manualGenerativity();
     static void printTasks();
+    static std::vector<Task>returnTasks();
 };
 
 #endif //TASKSSCHEDULING_GENERATOR_H

@@ -100,6 +100,10 @@ void geneticAlgorithm() {
         }
         loopNum++;
     }
+    cout<<endl;
+    for (int i = 0; i<theBestLineup.lineup.size(); i++) {
+        cout<<"TaskID: "<<theBestLineup.lineup[i].getId()<<"TaskBeg1m: "<<theBestLineup.lineup[i].getBeginning_1m()<<"TaskBeg2m: "<<theBestLineup.lineup[i].getBeginning_2m()<<endl;
+    }
     delete population;
 }
 
@@ -107,6 +111,7 @@ int main() {
     srand( time( NULL) );
     //test2();
     Generator::generate();
+    Generator::printTasks();
     //JohnsonsAlgorithm::createLineupJA();
     geneticAlgorithm();
     return 0;
