@@ -62,7 +62,7 @@ void Generator::automaticGenerativity() {
     numOfBreaks=(((rand()%31)+20)*numOfTasks)/100;     // zakres <20% liczby zadań; 50% liczby zadań>
     maxTaskLen=5;
     breaksLen=(rand()%maxTaskLen)+1;    // zakres <1; maxTaskLen>
-    maxDistBetweenBreaks=(rand()%((maxTaskLen)+1))+2*maxTaskLen;    // zakres <2*maxTaskLen; 3*maxTaskLen>
+    maxDistBetweenBreaks=(rand()%((maxTaskLen)+1))+(2*maxTaskLen);    // zakres <2*maxTaskLen; 3*maxTaskLen>
     cout << "Liczba zadan:\t" << numOfTasks << endl;
     cout << "Liczba okresow niedostepnosci:\t" << numOfBreaks << endl;
     cout << "Czas trwania okresu niedostepnosci:\t" << breaksLen << endl;

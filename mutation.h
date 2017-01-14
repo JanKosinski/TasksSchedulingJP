@@ -9,12 +9,12 @@
 #include <ctime>
 
 std::vector<int> mutation(std::vector<int> inputOrder) {
-    int inputSize = inputOrder.size()-1;
+    int inputSize = inputOrder.size();
     // mutacja polega na zamianie 2 zadan ze soba w wektorze kolejnosci
-    int idx1 = (std::rand()%inputSize) + 0; //losujemy pierwszy index
-    int idx2 = (std::rand()%inputSize) + 0; //i drugi
+    int idx1 = (std::rand()%inputSize); //losujemy pierwszy index
+    int idx2 = (std::rand()%inputSize); //i drugi
     while (idx1 == idx2) {  // jezeli wylosowany zostanie dwa razy ten sam index to losujemy dalej
-        idx2 = (std::rand()%inputOrder.size()-1) + 0;
+        idx2 = (std::rand()%inputSize);
     }
     //zamieniamy wartosci pod oboma indeksami miejscami
     int a = inputOrder[idx1];

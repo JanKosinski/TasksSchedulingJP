@@ -75,7 +75,6 @@ vector<int> operator* (vector<int> mother, vector<int> father) {
             output[idxToInsert] = valueToInsert;    //wstawia wartosc
         }
     }
-
     return output;
 }
 
@@ -88,14 +87,14 @@ void Population::hybridization() {
     Lineup l;
     vector<Lineup>tempVectorOfLineups = this->lineups;      //przepisujemy osobniki, ktore przezyly selekcje
     while(tempVectorOfLineups.size()<populationSize) {      //dopoki nie osiagniemy pojemnosci srodowiska czyli populationSize
-        randomLineup = (rand()%this->lineups.size())+0;     //szukamy losowego partnera dla danego osobnika
+        randomLineup = (rand()%(this->lineups.size()));     //szukamy losowego partnera dla danego osobnika
         while (randomLineup == i) {
-            randomLineup = (rand()%this->lineups.size())+0; //nie moze przeciez krzyzowac sie ze soba
+            randomLineup = (rand()%(this->lineups.size())); //nie moze przeciez krzyzowac sie ze soba
         }
         newLineup = lineupToTasksOrder(this->lineups[i])*lineupToTasksOrder(this->lineups[randomLineup]);   //krzyzujemy
 
         //MUTACJA!
-        random = (rand()%100)+0;
+        random = (rand()%100);
         if (random<=3) {
             newLineup = mutation(newLineup);
         }

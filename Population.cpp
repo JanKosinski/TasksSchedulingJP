@@ -67,7 +67,7 @@ void Population::createProbabilities() {
     }
 }
 
-void Population::selection(bool minPopSize) {
+void Population::selection() {
     vector<Lineup>newPopulation;
     this->sortPopulation();
     this->createProbabilities();
@@ -76,14 +76,8 @@ void Population::selection(bool minPopSize) {
         random = (rand()%100)+0;
         if (this->probabilities[i]<=random) {   //jezeli wylosowana zostala liczba ktora miesci sie w okreslonym prawdopodobienstwie
             newPopulation.push_back(this->lineups[i]);  //dodajemy rozwiazanie
-            if (minPopSize&&newPopulation.size()>=minPopulationSize) {  //jezeli zostala osiagnieta minPopSize a wywolanie funkcji bylo rekurencyjne
-                break; //przerywamy
-            }
         }
     }
-    /*while(newPopulation.size()<minPopulationSize) { // tak dlugo dokonuje selekcji by pozostalo min minPopulationSize osobnikow
-        this->selection(true);
-    }*/
     this->lineups = newPopulation;  //zapisujemy nowa populacje
 }
 

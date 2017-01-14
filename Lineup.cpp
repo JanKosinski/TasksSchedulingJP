@@ -8,7 +8,13 @@
 #include "parameters.h"
 #include <iostream>
 
-bool distanceBetweenTechnicalBreaks = false;
+std::vector<int> toTasksOrder(Lineup currentLineup) {
+    std::vector<int>myNewOrder;
+    for (int i = 0; i<currentLineup.lineup.size(); i++) {
+        myNewOrder.push_back(currentLineup.lineup[i].getId());
+    }
+    return myNewOrder;
+}
 
 void Lineup::setCj(int value) {
     this->cj = value;
@@ -18,22 +24,50 @@ int Lineup::getCj() {
     return this->cj;
 }
 
-std::vector<int> checkDistanceBetweenTechnicalBreaks(std::vector<Task>lineup) { // funkcja sprawdza czy maksymalny odstep x pomiedzy przerwami jest zachowany
-    //TODO
+bool checkDistanceBetweenTechnicalBreaks(vector<Task>lineup) { // funkcja sprawdza czy maksymalny odstep x pomiedzy przerwami jest zachowany
+    int prvBreakEnd = 0;
+    for (int i = 0; i<lineup.size(); i++) {
+        if (!lineup[i].isItTask()) {
+            if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+                return false;
+            }
+            prvBreakEnd = lineup[i].getBeginning_2m()+lineup[i].getLen_2m();
+        }
+    }
+    return true;
+}
 
+vector<int> swapTasks(vector<int>inputOrder, int idx1, int idx2) {
+    int a = inputOrder[idx1];
+    inputOrder[idx1] = inputOrder[idx2];
+    inputOrder[idx2] = a;
+    return inputOrder;
+}
+
+vector<int> changeOrder(Lineup lineup) {
+    int prvBreakEnd = 0;
+    vector<int>newOrder;
+    //vector<int>test;    //TEST
+    for (int i = 0; i<lineup.lineup.size(); i++) {
+        if (!lineup.lineup[i].isItTask()) {
+            if (prvBreakEnd!=0 && (lineup.lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+                newOrder = toTasksOrder(lineup);
+                newOrder = swapTasks(newOrder, (i-1) , i);
+                return newOrder;
+            }
+            prvBreakEnd = lineup.lineup[i].getBeginning_2m()+lineup.lineup[i].getLen_2m();
+        }
+    }
+    return newOrder;
 }
 
 void Lineup::createLineup(std::vector<int> tasksOrder) {
-    std::vector<int>fixedBreaks;    // wektor zawierajacy kolejnosc zadan ze zmianami tak by zachowany byl max odstep x pomiedzy przerwami
     this->lineup.clear();   //czyscimy poprzednie uszeregowanie. W to miejsce bedziemy zapisywac nowe
     int currentTime = 0;    // czas zakonczenia ostatniego zadania na pierwszej maszynie
     int lastTaskLen_2m = 0;  // czas trwania ostatniego zadania na 2 maszynie
-    bool test = false;
     for (int i = 0; i<tasksOrder.size(); i++) {     // iterujemy po wektorze reprezentujacym kolejnosc zadan
-        test = false;
         for (int j = 0; j<tasks.size(); j++) {   // szukamy w biezacym uszeregowaniu zdania o id takim samym jak w wektorze reprezentujacym kolejnosc
             if (tasksOrder[i] == tasks[j].getId()) {
-                test = true;
                 if (lastTaskLen_2m > tasks[j].getLen_1m()) {   // jezeli czas trwania poprzedniego zadania na drugiej maszynie jest wiekszy niz obecnego na pierwszej
                     currentTime += lastTaskLen_2m - tasks[j].getLen_1m(); //trzeba wstawic zadanie tak zeby jego operacja na 2m mogla zaczac sie zaraz po zakonczeniu pierwszej
                 }
@@ -45,19 +79,11 @@ void Lineup::createLineup(std::vector<int> tasksOrder) {
                 break;  // jezeli znajdziemy konczymy szukanie
             }
         }
-        //TEST
-        if(test == false) {
-            cout<<endl;
-            for (int i = 0; i<tasksOrder.size(); i++) {
-                cout<<tasksOrder[i]<<" ";
-            }
-            cout<<endl;
-        }
-
-        //TEST
     }
-    //distanceBetweenTechnicalBreaks = false;     //zakladamy ze warunek z odstepami miedzy przerwami nie jest spelniony. Trzeba to sprawdzic
-    //TODO napisać przesuwanie przerw na zasadzie (while(jest za daleko) swap nastepna przerwe z poprzedzajacym ja zadaniem)
+
+    while (!checkDistanceBetweenTechnicalBreaks(this->lineup)) {
+        createLineup(changeOrder(*this));
+    }
 
     // zliczanie sumy czasów zakończenia zadań
     this->setCj(0);
@@ -65,10 +91,6 @@ void Lineup::createLineup(std::vector<int> tasksOrder) {
         if (this->lineup[i].isItTask()) {
             this->setCj(this->getCj()+this->lineup[i].getBeginning_2m()+this->lineup[i].getLen_2m());
         }
-    }
-
-    if (this->lineup.size()!=tasksOrder.size()) {
-        cout<<"ALARM"<<endl;
     }
 }
 

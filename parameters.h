@@ -8,7 +8,6 @@
 
 #include "Task.h"
 #include "Generator.h"
-//#include <generate.cpp>
 #include <vector>
 
 using namespace std;
@@ -25,5 +24,6 @@ extern int maxDistBetweenBreaks;    //maksymalny czas x po ukonczeniu jednego ok
 extern int populationSize; //rozmiar populacji
 extern int minPopulationSize; //liczebnosc populacji nie moze spasc ponizej tego poziomu
 extern int probabilityOfMutation; //prawdopodobieństwo mutacji. W procentach
+extern int numberOfLoops;
 
 #endif //TASKSSCHEDULING_PARAMETERS_H
