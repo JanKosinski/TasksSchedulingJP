@@ -58,7 +58,7 @@ vector<int> changeOrder(Lineup lineup) {
             prvBreakEnd = lineup.lineup[i].getBeginning_2m()+lineup.lineup[i].getLen_2m();
         }
     }
-    return newOrder;
+    return newOrder; // Po co to?   Loczi 15.01.2017
 }
 
 void Lineup::createLineup(std::vector<int> tasksOrder) {

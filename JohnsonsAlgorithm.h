@@ -15,8 +15,9 @@ class JohnsonsAlgorithm {
         int getCj();
         void setCj(int value);
         std::vector <Task> lineupJA;
-        static  void  createLineupJA();
-        //static std::vector <Task> createLineupJA();
+        void createLineupJA();
+        void setValues(std::vector<int> tasksOrder);
+        void printLineup();
 };
 
 #endif //TASKSSCHEDULING_JOHNSONSALGORITHM_H

@@ -47,9 +47,10 @@ void geneticAlgorithm() {
 int main() {
     srand( time( NULL) );
     Generator::generate();
-    Generator::printTasks();
-    //JohnsonsAlgorithm::createLineupJA();
-    geneticAlgorithm();
-
+    //Generator::printTasks();
+    JohnsonsAlgorithm *JA;
+    JA = new JohnsonsAlgorithm();
+    JA->createLineupJA();
+    JA->printLineup();
     return 0;
 }

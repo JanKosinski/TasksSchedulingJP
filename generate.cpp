@@ -50,7 +50,6 @@ void Generator::generate() {
         tasks.push_back(tmp_task);
     }
     for (int i=numOfTasks+1;i<numOfBreaks+numOfTasks+1;i++){
-        //len2=(rand()%maxTaskLen)+1;
         Task tmp_task=Task(i, 0, breaksLen, false);
         tasks.push_back(tmp_task);
     }
@@ -87,7 +86,7 @@ void Generator::manualGenerativity() {
 
 void Generator::printTasks() {
     for (int i = 0; i<tasks.size(); i++) {
-        cout<<"TaskID: "<<tasks[i].getId()<<"TaskLen1m: "<<tasks[i].getLen_1m()<<"TaskLen2m: "<<tasks[i].getLen_2m()<<endl;
+        cout<<"TaskID: "<<tasks[i].getId()<<"\tTaskLen1m: "<<tasks[i].getLen_1m()<<"\tTaskLen2m: "<<tasks[i].getLen_2m()<<endl;
     }
     system( "read -n 1 -s -p \"Press any key to continue...\"" );
 }

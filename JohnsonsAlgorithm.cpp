@@ -115,40 +115,153 @@ void printTest() {
 
 }
 
+void JohnsonsAlgorithm::printLineup() {
+    for (int i=0; i<lineupJA.size(); i++){
+        if (lineupJA[i].isItTask()){
+            cout << endl << "Task: " << lineupJA[i].getId() << "\tStart1: " << lineupJA[i].getBeginning_1m() << "\tLen1: " << lineupJA[i].getLen_1m() << "\tStart2: " << lineupJA[i].getBeginning_2m() << "\tLen2: " << lineupJA[i].getLen_2m();
+        }
+        else{
+            cout << endl << "Break: " << lineupJA[i].getId() << "\tStart1: " << lineupJA[i].getBeginning_1m() << "\tLen1: " << lineupJA[i].getLen_1m() << "\tStart2: " << lineupJA[i].getBeginning_2m() << "\tLen2: " << lineupJA[i].getLen_2m();
+        }
+    }
+}
+
 void JohnsonsAlgorithm::createLineupJA() {
-    for (int i=0; i<tasks.size(); i++) {
+    std::vector<int> order;
+    for (int i = 0; i < tasks.size(); i++) {
         if (tasks[i].isItTask()) {
-            if (tasks[i].getLen_1m()<=tasks[i].getLen_2m()) {
+            if (tasks[i].getLen_1m() <= tasks[i].getLen_2m()) {
                 tasks1.push_back(tasks[i]);
-            }
-            else {
+            } else {
                 tasks2.push_back(tasks[i]);
             }
         }
     }
-    quickSort1(0,tasks1.size()-1);
-    quickSort2(0,tasks2.size()-1);
-    int left=0;
+    quickSort1(0, tasks1.size() - 1);
+    quickSort2(0, tasks2.size() - 1);
+    int left = 0;
     int right;
-    for (int i=0; i<tasks1.size(); i++) {
-        if (tasks1[i].getLen_1m()!=tasks1[i+1].getLen_1m()) {
-            right=i;
-            if (left!=right) {
-                quickSort1_1(left,right);
+    for (int i = 0; i < tasks1.size(); i++) {
+        if (tasks1[i].getLen_1m() != tasks1[i + 1].getLen_1m()) {
+            right = i;
+            if (left != right) {
+                quickSort1_1(left, right);
             }
-            left=i+1;
+            left = i + 1;
         }
     }
-    left=0;
-    for (int i=0; i<tasks2.size(); i++) {
-        if (tasks2[i].getLen_2m()!=tasks2[i+1].getLen_2m()) {
-            right=i;
-            if (left!=right) {
-                quickSort2_2(left,right);
+    left = 0;
+    for (int i = 0; i < tasks2.size(); i++) {
+        if (tasks2[i].getLen_2m() != tasks2[i + 1].getLen_2m()) {
+            right = i;
+            if (left != right) {
+                quickSort2_2(left, right);
             }
-            left=i+1;
+            left = i + 1;
         }
     }
-    printTest();
+    for (int i=0; i < tasks.size(); i++){
+        if (!tasks[i].isItTask()){
+            order.push_back(tasks[i].getId());
+            break;
+        }
+    }
+    for (int i = 0; i < tasks1.size(); i++) {
+        order.push_back(tasks1[i].getId());
+    }
+    for (int i = 0; i < tasks2.size(); i++) {
+        order.push_back(tasks2[i].getId());
+    }
+    int countBreaks=0;
+    for (int i=0; i < tasks.size(); i++){
+        if (!tasks[i].isItTask()){
+            if (countBreaks!=0) {
+                order.push_back(tasks[i].getId());
+            }
+            countBreaks+=1;
+        }
+    }
+    setValues(order);
+}
+
+
+/////////////////////////////////////////////////////////
+
+std::vector<int> toTasksOrder(JohnsonsAlgorithm JA) {
+    std::vector<int>myNewOrder;
+    for (int i = 0; i<JA.lineupJA.size(); i++) {
+        myNewOrder.push_back(JA.lineupJA[i].getId());
+    }
+    return myNewOrder;
+}
+
+bool checkDistanceBetweenTechnicalBreaksJA(vector<Task>lineup) { // funkcja sprawdza czy maksymalny odstep x pomiedzy przerwami jest zachowany
+    int prvBreakEnd = 0;
+    for (int i = 0; i<lineup.size(); i++) {
+        if (!lineup[i].isItTask()) {
+            if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+                return false;
+            }
+            prvBreakEnd = lineup[i].getBeginning_2m()+lineup[i].getLen_2m();
+        }
+    }
+    return true;
+}
+
+vector<int> swapTasksJA(vector<int>inputOrder, int idx1, int idx2) {
+    int a = inputOrder[idx1];
+    inputOrder[idx1] = inputOrder[idx2];
+    inputOrder[idx2] = a;
+    return inputOrder;
+}
+
+vector<int> changeOrder(JohnsonsAlgorithm JA) {
+    int prvBreakEnd = 0;
+    vector<int>newOrder;
+    //vector<int>test;    //TEST
+    for (int i = 0; i<JA.lineupJA.size(); i++) {
+        if (!JA.lineupJA[i].isItTask()) {
+            if (prvBreakEnd!=0 && (JA.lineupJA[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+                newOrder = toTasksOrder(JA);
+                newOrder = swapTasksJA(newOrder, (i-1) , i);
+                return newOrder;
+            }
+            prvBreakEnd = JA.lineupJA[i].getBeginning_2m()+JA.lineupJA[i].getLen_2m();
+        }
+    }
+    return newOrder; // Po co to?   Loczi 15.01.2017
+}
+
+void JohnsonsAlgorithm::setValues(std::vector<int> tasksOrder) {
+    this->lineupJA.clear();   //czyscimy poprzednie uszeregowanie. W to miejsce bedziemy zapisywac nowe
+    int currentTime = 0;    // czas zakonczenia ostatniego zadania na pierwszej maszynie
+    int lastTaskLen_2m = 0;  // czas trwania ostatniego zadania na 2 maszynie
+    for (int i = 0; i<tasksOrder.size(); i++) {     // iterujemy po wektorze reprezentujacym kolejnosc zadan
+        for (int j = 0; j<tasks.size(); j++) {   // szukamy w biezacym uszeregowaniu zdania o id takim samym jak w wektorze reprezentujacym kolejnosc
+            if (tasksOrder[i] == tasks[j].getId()) {
+                if (lastTaskLen_2m > tasks[j].getLen_1m()) {   // jezeli czas trwania poprzedniego zadania na drugiej maszynie jest wiekszy niz obecnego na pierwszej
+                    currentTime += lastTaskLen_2m - tasks[j].getLen_1m(); //trzeba wstawic zadanie tak zeby jego operacja na 2m mogla zaczac sie zaraz po zakonczeniu pierwszej
+                }
+                tasks[j].setBeginning_1m(currentTime);  //ustawiamy czas rozpoczecia zadania na pierwszej maszynie
+                currentTime += tasks[j].getLen_1m();    //ustawiamy zmienna currentTime na czas zakonczenia ostatniego zadania na pierwszej maszynie
+                tasks[j].setBeginning_2m(currentTime);  //zmienna currentTime warunkuje od razu kiedy powinno zaczynac sie zadanie na drugiej maszynie
+                this->lineupJA.push_back(tasks[j]);   // dodajemy zadanie do nowo powstalego uszeregowania
+                lastTaskLen_2m = tasks[j].getLen_2m();   //ustawiamy zmienna informujaca nas o czasie trwania ostatniego zadania na 2m
+                break;  // jezeli znajdziemy konczymy szukanie
+            }
+        }
+    }
+
+    while (!checkDistanceBetweenTechnicalBreaksJA(this->lineupJA)) {
+        setValues(changeOrder(*this));
+    }
+
+    // zliczanie sumy czasów zakończenia zadań
+    this->setCj(0);
+    for (int i = 0 ; i<this->lineupJA.size(); i++) {
+        if (this->lineupJA[i].isItTask()) {
+            this->setCj(this->getCj()+this->lineupJA[i].getBeginning_2m()+this->lineupJA[i].getLen_2m());
+        }
+    }
 }
 
