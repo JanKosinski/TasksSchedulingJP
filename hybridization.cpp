@@ -95,7 +95,7 @@ void Population::hybridization() {
 
         //MUTACJA!
         random = (rand()%100);
-        if (random<=3) {
+        if (random<=10) {
             newLineup = mutation(newLineup);
         }
         //KONIEC MUTACJI
