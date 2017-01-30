@@ -9,15 +9,17 @@
       <sourceFolder url="file://$MODULE_DIR$/Lineup.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/hybridization.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Task.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Population.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Population.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/JohnsonsAlgorithm.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/parameters.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Task.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Task.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Generator.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mutation.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Population.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ExactAlgorithm.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ExactAlgorithm.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Loader.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

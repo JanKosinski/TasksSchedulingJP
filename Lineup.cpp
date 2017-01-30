@@ -28,7 +28,8 @@ bool checkDistanceBetweenTechnicalBreaks(vector<Task>lineup) { // funkcja sprawd
     int prvBreakEnd = 0;
     for (int i = 0; i<lineup.size(); i++) {
         if (!lineup[i].isItTask()) {
-            if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            //if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            if ((lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
                 return false;
             }
             prvBreakEnd = lineup[i].getBeginning_2m()+lineup[i].getLen_2m();
@@ -50,7 +51,8 @@ vector<int> changeOrder(Lineup lineup) {
     //vector<int>test;    //TEST
     for (int i = 0; i<lineup.lineup.size(); i++) {
         if (!lineup.lineup[i].isItTask()) {
-            if (prvBreakEnd!=0 && (lineup.lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            //if (prvBreakEnd!=0 && (lineup.lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            if ((lineup.lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
                 newOrder = toTasksOrder(lineup);
                 newOrder = swapTasks(newOrder, (i-1) , i);
                 return newOrder;

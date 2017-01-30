@@ -160,30 +160,47 @@ void JohnsonsAlgorithm::createLineupJA() {
             left = i + 1;
         }
     }
-    for (int i=0; i < tasks.size(); i++){
-        if (!tasks[i].isItTask()){
-            order.push_back(tasks[i].getId());
-            break;
-        }
-    }
+    printTest();
     for (int i = 0; i < tasks1.size(); i++) {
         order.push_back(tasks1[i].getId());
     }
     for (int i = 0; i < tasks2.size(); i++) {
         order.push_back(tasks2[i].getId());
     }
-    int countBreaks=0;
-    for (int i=0; i < tasks.size(); i++){
-        if (!tasks[i].isItTask()){
-            if (countBreaks!=0) {
-                order.push_back(tasks[i].getId());
-            }
-            countBreaks+=1;
+    for (int i=0; i < tasks.size(); i++) {
+        if (!tasks[i].isItTask()) {
+            order.push_back(tasks[i].getId());
         }
     }
     setValues(order);
+    deleteEmptyBreaks();
 }
 
+void JohnsonsAlgorithm::deleteEmptyBreaks(){
+    int move=0;
+    int space1=0;
+    int space2=0;
+    int new_beginning_1m;
+    int new_beginning_2m;
+    int before_break;
+    for (int i=0; i<lineupJA.size()-1; i++) {
+        if (!lineupJA[i].isItTask() && i!=0) {
+            before_break=lineupJA[i-1].getBeginning_1m()+lineupJA[i-1].getLen_1m();
+            lineupJA[i].setBeginning_1m(before_break);
+        }
+        if (lineupJA[i+1].getBeginning_1m()>(lineupJA[i].getBeginning_1m()+lineupJA[i].getLen_1m())){   // Jesli jest pusta przestrzen przed operacja na 1 maszynie
+            if (lineupJA[i+1].getBeginning_2m()>(lineupJA[i].getBeginning_2m()+lineupJA[i].getLen_2m())){ // Jesli jest pusta przestrzen przed operacja na 2 maszynie
+                space1=lineupJA[i+1].getBeginning_1m()-(lineupJA[i].getBeginning_1m()+lineupJA[i].getLen_1m());
+                space2=lineupJA[i+1].getBeginning_2m()-(lineupJA[i].getBeginning_2m()+lineupJA[i].getLen_2m());
+                move=min(space1,space2);
+                new_beginning_1m=lineupJA[i+1].getBeginning_1m()-move;
+                new_beginning_2m=lineupJA[i+1].getBeginning_2m()-move;
+                lineupJA[i+1].setBeginning_1m(new_beginning_1m);
+                lineupJA[i+1].setBeginning_2m(new_beginning_2m);
+            }
+        }
+    }
+}
 
 /////////////////////////////////////////////////////////
 
@@ -199,7 +216,8 @@ bool checkDistanceBetweenTechnicalBreaksJA(vector<Task>lineup) { // funkcja spra
     int prvBreakEnd = 0;
     for (int i = 0; i<lineup.size(); i++) {
         if (!lineup[i].isItTask()) {
-            if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            //if (prvBreakEnd!=0 && (lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            if ((lineup[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
                 return false;
             }
             prvBreakEnd = lineup[i].getBeginning_2m()+lineup[i].getLen_2m();
@@ -218,10 +236,10 @@ vector<int> swapTasksJA(vector<int>inputOrder, int idx1, int idx2) {
 vector<int> changeOrder(JohnsonsAlgorithm JA) {
     int prvBreakEnd = 0;
     vector<int>newOrder;
-    //vector<int>test;    //TEST
     for (int i = 0; i<JA.lineupJA.size(); i++) {
         if (!JA.lineupJA[i].isItTask()) {
-            if (prvBreakEnd!=0 && (JA.lineupJA[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            //if (prvBreakEnd!=0 && (JA.lineupJA[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
+            if ((JA.lineupJA[i].getBeginning_2m()-prvBreakEnd)>maxDistBetweenBreaks) {
                 newOrder = toTasksOrder(JA);
                 newOrder = swapTasksJA(newOrder, (i-1) , i);
                 return newOrder;
@@ -229,7 +247,7 @@ vector<int> changeOrder(JohnsonsAlgorithm JA) {
             prvBreakEnd = JA.lineupJA[i].getBeginning_2m()+JA.lineupJA[i].getLen_2m();
         }
     }
-    return newOrder; // Po co to?   Loczi 15.01.2017
+    return newOrder;
 }
 
 void JohnsonsAlgorithm::setValues(std::vector<int> tasksOrder) {

@@ -18,6 +18,7 @@ class JohnsonsAlgorithm {
         void createLineupJA();
         void setValues(std::vector<int> tasksOrder);
         void printLineup();
+        void deleteEmptyBreaks();
 };
 
 #endif //TASKSSCHEDULING_JOHNSONSALGORITHM_H

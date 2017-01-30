@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include "Generator.h"
 #include "JohnsonsAlgorithm.h"
+#include "ExactAlgorithm.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ using namespace std;
 #include "Loader.h"
 
 int numberOfLoops = 10000;
+
 
 void geneticAlgorithm() {
     Population *population = new Population();
@@ -49,20 +51,42 @@ void geneticAlgorithm() {
     }
     cout<<endl;
     for (int i = 0; i<theBestLineup.lineup.size(); i++) {
-        cout<<"TaskID: "<<theBestLineup.lineup[i].getId()<<"TaskBeg1m: "<<theBestLineup.lineup[i].getBeginning_1m()<<"TaskBeg2m: "<<theBestLineup.lineup[i].getBeginning_2m()<<endl;
+        cout<<"TaskID: "<<theBestLineup.lineup[i].getId()<<" TaskBeg1m: "<<theBestLineup.lineup[i].getBeginning_1m()<<" Len_1M: "<< theBestLineup.lineup[i].getLen_1m()<<" TaskBeg2m: "<<theBestLineup.lineup[i].getBeginning_2m()<<" Len_2M: "<<theBestLineup.lineup[i].getLen_2m()<<endl;
     }
     delete population;
 }
 
+void RunJohnsonsAlgorithm() {
+    JohnsonsAlgorithm *JA;
+    JA = new JohnsonsAlgorithm();
+    JA->createLineupJA();
+    JA->printLineup();
+    cout << endl << "Cj = " << JA->getCj() << endl;
+}
+
+void RunExactAlgorithm() {
+    vector <int> listOfNumbersOfTasks;
+    for (int i=1; i<=tasks.size(); i++){
+        listOfNumbersOfTasks.push_back(i);
+    }
+    ExactAlgorithm *EA;
+    EA = new ExactAlgorithm();
+    EA->generatePermutations(listOfNumbersOfTasks,0);
+    EA->printLineup();
+    cout << endl << "Cj = " << EA->getTheBestCj() << endl;
+}
+
 int main() {
     srand( time( NULL) );
-    Loader::loadData();
+    //Loader::loadData();
+    Generator::generate();
+    Generator::printTasks();
+    //cout << endl << endl << "JOHNSONS ALGORITHM" << endl << endl;
+    //RunJohnsonsAlgorithm();
+    cout << endl << endl << "EXACT ALGORITHM" << endl << endl;
+    RunExactAlgorithm();
+    cout << endl << endl << "GENETIC ALGORITHM" << endl << endl;
     geneticAlgorithm();
-    //Generator::generate();
-    //Generator::printTasks();
-    //JohnsonsAlgorithm *JA;
-    //JA = new JohnsonsAlgorithm();
-    //JA->createLineupJA();
-    //JA->printLineup();
+
     return 0;
 }
